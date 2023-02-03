@@ -1,0 +1,31 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+contract Voting{
+    struct candidate{
+        string name;
+        uint age;
+        string party;
+    }
+    address public owner;
+    constructor(){
+        owner=msg.sender;
+    }
+    uint public candidateCount;
+    mapping(uint=>candidate)public Candidates;
+    mapping(uint=>uint)public votes;
+    uint public totalVotes;
+
+    function addCandidate(string calldata _name,uint _age,string calldata _party)public{
+        require(owner==msg.sender,"You sre not the owner") ;    
+        candidateCount++;
+        candidate memory person=candidate({name:_name,age:_age,party:_party});
+         Candidates[candidateCount]=person;
+    }
+    function vote(uint id)public{
+        require(id>0,"candidate does not exist");
+        require(id<=candidateCount,"candidate does not exist");
+        votes[id]++;
+        totalVotes++;
+    }
+}
